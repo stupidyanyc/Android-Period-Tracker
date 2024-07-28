@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF0F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="設置"
+            android:textSize="24sp"
+            android:textColor="#FF69B4"
+            android:layout_marginBottom="16dp" />
+
+        <Switch
+            android:id="@+id/switchReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"
+            android:text="開啟提醒功能"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/reminderTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提醒時間: "
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewReminderTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="09:00"
+                android:textSize="18sp"
+                android:layout_marginRight="16dp" />
+
+            <Button
+                android:id="@+id/buttonSetReminderTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="設置時間"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/switchWaterReminder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:minHeight="48dp"
+            android:text="喝水提醒"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/waterReminderTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="喝水提醒時間: "
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewWaterReminderTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="每2小時"
+                android:textSize="18sp"
+                android:layout_marginRight="16dp" />
+
+            <Button
+                android:id="@+id/buttonSetWaterReminderTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="設置間隔"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/buttonChangeUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="更改用戶名"
+            android:backgroundTint="#FF69B4"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/buttonChangeEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="更改郵箱"
+            android:backgroundTint="#FF69B4"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/buttonChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="更改密碼"
+            android:backgroundTint="#FF69B4"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/buttonChangeAvatar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="更改頭像"
+            android:backgroundTint="#FF69B4"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="8dp" />
+
+    </LinearLayout>
+</ScrollView>
