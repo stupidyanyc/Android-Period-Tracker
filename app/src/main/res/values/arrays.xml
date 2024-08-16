@@ -1,0 +1,28 @@
+<resources>
+    <string-array name="period_length_array">
+        <item>3 days</item>
+        <item>4 days</item>
+        <item>5 days</item>
+        <item>6 days</item>
+        <item>7 days</item>
+        <item>8 days</item>
+    </string-array>
+
+    <string-array name="cycle_length_array">
+        <item>21 days</item>
+        <item>22 days</item>
+        <item>23 days</item>
+        <item>24 days</item>
+        <item>25 days</item>
+        <item>26 days</item>
+        <item>27 days</item>
+        <item>28 days</item>
+        <item>29 days</item>
+        <item>30 days</item>
+        <item>31 days</item>
+        <item>32 days</item>
+        <item>33 days</item>
+        <item>34 days</item>
+        <item>35 days</item>
+    </string-array>
+</resources>

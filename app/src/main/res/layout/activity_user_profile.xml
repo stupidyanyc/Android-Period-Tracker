@@ -18,11 +18,11 @@
             android:src="@mipmap/default_avatar" />
 
         <TextView
-            android:id="@+id/textViewUsername"
+            android:id="@+id/textViewUserId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="用戶名"
+            android:text="UserID"
             android:textSize="24sp"
             android:textColor="#FF69B4"
             android:layout_marginTop="16dp" />
@@ -35,6 +35,15 @@
             android:text="user@example.com"
             android:textSize="18sp"
             android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/textViewBirthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="生日: "
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
 
         <View
             android:layout_width="match_parent"
@@ -51,22 +60,24 @@
             android:textColor="#FF69B4"
             android:layout_marginBottom="8dp" />
 
+        <TextView
+            android:id="@+id/textViewLastPeriod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="上次經期: "
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="經期長度: "
-                android:textSize="18sp" />
-
-            <TextView
                 android:id="@+id/textViewPeriodLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5天"
+                android:text="經期長度: 5天"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -77,16 +88,10 @@
             android:layout_marginTop="8dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="週期長度: "
-                android:textSize="18sp" />
-
-            <TextView
                 android:id="@+id/textViewCycleLength"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="28天"
+                android:text="週期長度: 28天"
                 android:textSize="18sp" />
         </LinearLayout>
 

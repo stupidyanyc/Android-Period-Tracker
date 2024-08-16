@@ -1,31 +1,87 @@
 package com.example.fyp20;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
-    TextView textViewRegister = findViewById(R.id.textViewRegister);
+    private EditText editTextEmail, editTextPassword;
+    private Button buttonLogin;
+    private TextView textViewRegister, textViewForgotPassword;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        String text = "Don't Have An Account Yet? Register";
-        SpannableString spannableString = new SpannableString(text);
+        mAuth = FirebaseAuth.getInstance();
 
-        // 找到 "登錄" 的起始位置和结束位置
-        int start = text.indexOf("Register");
-        int end = start + "Register".length();
+        editTextEmail = findViewById(R.id.editTextEmail);
+        editTextPassword = findViewById(R.id.editTextPassword);
+        buttonLogin = findViewById(R.id.buttonLogin);
+        textViewRegister = findViewById(R.id.textViewRegister);
+        textViewForgotPassword = findViewById(R.id.textViewForgotPassword);
 
-        // 为 "登錄" 添加下划线
-        spannableString.setSpan(new UnderlineSpan(), start, end, 0);
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginUser(v);
+            }
+        });
 
-        textViewRegister.setText(spannableString);
+        textViewRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            }
+        });
+
+        textViewForgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle forgot password logic
+            }
+        });
+    }
+
+    private void loginUser(View view) {
+        String email = editTextEmail.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Snackbar.make(view, "請輸入電子郵件", Snackbar.LENGTH_SHORT).show();
+            editTextEmail.setError("請輸入電子郵件");
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            Snackbar.make(view, "請輸入密碼", Snackbar.LENGTH_SHORT).show();
+            editTextPassword.setError("請輸入密碼");
+            return;
+        }
+
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Snackbar.make(view, "登入成功", Snackbar.LENGTH_SHORT).show();
+                    startActivity(new Intent(LoginActivity.this, UserProfileActivity.class));
+                } else {
+                    Snackbar.make(view, "登入失敗: " + task.getException().getMessage(), Snackbar.LENGTH_SHORT).show();                }
+            }
+        });
     }
 }

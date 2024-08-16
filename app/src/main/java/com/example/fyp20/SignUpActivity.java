@@ -1,10 +1,9 @@
 package com.example.fyp20;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -13,6 +12,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -21,33 +32,17 @@ public class SignUpActivity extends AppCompatActivity {
     private Spinner spinnerPeriodLength, spinnerCycleLength;
     private Button buttonRegister;
     private TextView textViewLogin;
-
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        TextView textViewLogin = findViewById(R.id.textViewLogin);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference("Users");
 
-        String text = "Already Have An Account? Login";
-        SpannableString spannableString = new SpannableString(text);
-
-        // 找到 "登錄" 的起始位置和结束位置
-        int start = text.indexOf("Login");
-        int end = start + "Login".length();
-
-        // 为 "登錄" 添加下划线
-        spannableString.setSpan(new UnderlineSpan(), start, end, 0);
-
-        textViewLogin.setText(spannableString);
-
-        initializeViews();
-        setupSpinners();
-        setupListeners();
-    }
-
-    private void initializeViews() {
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextConfirmPassword = findViewById(R.id.editTextConfirmPassword);
@@ -57,79 +52,97 @@ public class SignUpActivity extends AppCompatActivity {
         spinnerCycleLength = findViewById(R.id.spinnerCycleLength);
         buttonRegister = findViewById(R.id.buttonRegister);
         textViewLogin = findViewById(R.id.textViewLogin);
-    }
 
-    private void setupSpinners() {
-        ArrayAdapter<String> periodAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
-                new String[]{"3", "4", "5", "6", "7"});
-        periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPeriodLength.setAdapter(periodAdapter);
+        // Set up the spinners to be clickable and interactable
+        setupSpinners();
 
-        ArrayAdapter<String> cycleAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
-                new String[]{"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35"});
-        cycleAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCycleLength.setAdapter(cycleAdapter);
-    }
-
-    private void setupListeners() {
         buttonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validateInput()) {
-                    registerUser();
-                }
+                registerUser(v);
             }
         });
 
         textViewLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                // TODO: 跳轉到登錄頁面
-                Toast.makeText(SignUpActivity.this, "跳轉到登錄頁面", Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             }
         });
     }
 
-    private boolean validateInput() {
+    private void setupSpinners() {
+        // Setting up the period length spinner
+        ArrayAdapter<CharSequence> periodLengthAdapter = ArrayAdapter.createFromResource(this,
+                R.array.period_length_array, android.R.layout.simple_spinner_item);
+        periodLengthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPeriodLength.setAdapter(periodLengthAdapter);
+        spinnerPeriodLength.setEnabled(true);
+        spinnerPeriodLength.setClickable(true);
+
+        // Setting up the cycle length spinner
+        ArrayAdapter<CharSequence> cycleLengthAdapter = ArrayAdapter.createFromResource(this,
+                R.array.cycle_length_array, android.R.layout.simple_spinner_item);
+        cycleLengthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCycleLength.setAdapter(cycleLengthAdapter);
+        spinnerCycleLength.setEnabled(true);
+        spinnerCycleLength.setClickable(true);
+    }
+
+    private void registerUser(View view) {
         String email = editTextEmail.getText().toString().trim();
         String password = editTextPassword.getText().toString().trim();
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (TextUtils.isEmpty(email)) {
+            editTextEmail.setError("請輸入電子郵件");
+            Snackbar.make(view, "請輸入電子郵件", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             editTextEmail.setError("請輸入有效的電子郵件地址");
-            return false;
+            Snackbar.make(view, "請輸入有效的電子郵件地址", Snackbar.LENGTH_SHORT).show();
+            return;
         }
-
-        if (password.isEmpty() || password.length() < 6) {
-            editTextPassword.setError("密碼長度至少為6位");
-            return false;
+        if (TextUtils.isEmpty(password)) {
+            editTextPassword.setError("請輸入密碼");
+            Snackbar.make(view, "請輸入密碼", Snackbar.LENGTH_SHORT).show();
+            return;
         }
-
+        if (!isValidPassword(password)) {
+            editTextPassword.setError("密碼至少需包含8個字符，並包含至少一個大寫字母、一個小寫字母、一個數字和一個特殊符號");
+            Snackbar.make(view, "密碼需包含8個字符，並至少有一個大寫字母、一個小寫字母、一個數字和一個特殊符號", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         if (!password.equals(confirmPassword)) {
-            editTextConfirmPassword.setError("密碼不匹配");
-            return false;
+            editTextConfirmPassword.setError("密碼不一致");
+            Snackbar.make(view, "密碼不一致", Snackbar.LENGTH_SHORT).show();
+            return;
         }
 
-        return true;
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    String userId = user.getUid();
+                    UserInfo userInfo = new UserInfo(userId, email,
+                            datePickerBirthday.getDayOfMonth(), datePickerBirthday.getMonth(), datePickerBirthday.getYear(),
+                            datePickerLastPeriod.getDayOfMonth(), datePickerLastPeriod.getMonth(), datePickerLastPeriod.getYear(),
+                            spinnerPeriodLength.getSelectedItem().toString(), spinnerCycleLength.getSelectedItem().toString());
+                    mDatabase.child(userId).setValue(userInfo);
+
+                    Snackbar.make(view, "註冊成功", Snackbar.LENGTH_SHORT).show();
+                    startActivity(new Intent(SignUpActivity.this, UserProfileActivity.class));
+                } else {
+                    Snackbar.make(view, "註冊失敗: " + task.getException().getMessage(), Snackbar.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
-    private void registerUser() {
-        String email = editTextEmail.getText().toString().trim();
-        String password = editTextPassword.getText().toString().trim();
-
-        int birthYear = datePickerBirthday.getYear();
-        int birthMonth = datePickerBirthday.getMonth();
-        int birthDay = datePickerBirthday.getDayOfMonth();
-
-        int lastPeriodYear = datePickerLastPeriod.getYear();
-        int lastPeriodMonth = datePickerLastPeriod.getMonth();
-        int lastPeriodDay = datePickerLastPeriod.getDayOfMonth();
-
-        String periodLength = spinnerPeriodLength.getSelectedItem().toString();
-        String cycleLength = spinnerCycleLength.getSelectedItem().toString();
-
-        // TODO: 實現用戶註冊邏輯，可能涉及網絡請求或本地數據庫操作
-
-        Toast.makeText(this, "註冊成功！", Toast.LENGTH_SHORT).show();
+    private boolean isValidPassword(String password) {
+        Pattern passwordPattern = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$");
+        return passwordPattern.matcher(password).matches();
     }
 }
