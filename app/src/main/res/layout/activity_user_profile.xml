@@ -1,108 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF0F5">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:background="#FF69B4">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileImage"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            android:src="@mipmap/default_avatar" />
-
-        <TextView
-            android:id="@+id/textViewUserId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="UserID"
-            android:textSize="24sp"
-            android:textColor="#FF69B4"
-            android:layout_marginTop="16dp" />
-
-        <TextView
-            android:id="@+id/textViewEmail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="user@example.com"
-            android:textSize="18sp"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/textViewBirthday"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="生日: "
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
-
-        <View
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#FF69B4"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_height="256dp"
+            app:contentScrim="#FF69B4"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="經期資訊"
-            android:textSize="20sp"
-            android:textColor="#FF69B4"
-            android:layout_marginBottom="8dp" />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/app_logo"
+                app:layout_collapseMode="parallax" />
 
-        <TextView
-            android:id="@+id/textViewLastPeriod"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="上次經期: "
-            android:textSize="18sp"
-            android:layout_marginBottom="8dp" />
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:paddingBottom="56dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/textViewPeriodLength"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="經期長度: 5天"
-                android:textSize="18sp" />
-        </LinearLayout>
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <TextView
-                android:id="@+id/textViewCycleLength"
-                android:layout_width="wrap_content"
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profileImage"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_gravity="center"
+                        android:src="@mipmap/default_avatar" />
+
+                    <TextView
+                        android:id="@+id/textViewUserId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/user_id"
+                        android:textSize="24sp"
+                        android:textColor="#FF69B4"
+                        android:layout_marginTop="16dp" />
+
+                    <TextView
+                        android:id="@+id/textViewEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/user_email"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:id="@+id/textViewAge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/user_age"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:id="@+id/textViewBirthday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/birthdate"
+                        android:textSize="18sp"
+                        android:layout_marginTop="8dp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="週期長度: 28天"
-                android:textSize="18sp" />
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/period_info"
+                        android:textSize="20sp"
+                        android:textColor="#FF69B4"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:id="@+id/textViewLastPeriod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/last_period_date"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/textViewPeriodLength"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/period_length"
+                        android:textSize="18sp"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:id="@+id/textViewCycleLength"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cycle_length"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonOpenSettings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/setting_btn"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="24dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonMyCollection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/collection_btn"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF"
+                android:layout_marginTop="8dp" />
+
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <Button
-            android:id="@+id/buttonOpenSettings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="打開設置"
-            android:backgroundTint="#FF69B4"
-            android:textColor="#FFFFFF"
-            android:layout_marginTop="24dp" />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:background="#FFFFFF"
+        app:menu="@menu/bottom_navigation_menu"
+        app:itemIconTint="#FF69B4"
+        app:itemTextColor="#FF69B4"/>
 
-    </LinearLayout>
-</ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

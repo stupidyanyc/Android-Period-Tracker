@@ -27,9 +27,9 @@
     <string name="user_age">Age: %d</string>
     <string name="period_info">Period Info</string>
     <string name="setting_btn">Setting</string>
-    <string name="collection_btn">My Collection</string>
 
     <!--setting pg strings-->
+    <string name="collection_btn">My Collection</string>
     <string name="general_setting">General Setting</string>
     <string name="language_setting">Language</string>
     <string name="account_mgmnt">Account Management</string>
@@ -64,58 +64,7 @@
     <string name="enter_pswd_NotMatch">Password not match.</string>
     <string name="register_successful">Register Successful.</string>
     <string name="register_failed">Register failed: </string>
-
-    <!-- Bottom Navigation -->
     <string name="title_home">Home</string>
     <string name="title_profile">Profile</string>
     <string name="title_settings">Settings</string>
-
-    <string name="toolbar_title">My Calendar</string>
-
-    <string name="btn_start_period">Start Period</string>
-    <string name="btn_end_period">End Period</string>
-
-    <string name="cycle_predictions_title">Cycle Predictions</string>
-    <string name="next_period">Next Period: %1$s</string>
-    <string name="ovulation">Ovulation: %1$s</string>
-    <string name="middle_pain">Middle Pain: %1$s</string>
-    <string name="luteal_phase">Luteal Phase: %1$s</string>
-    <string name="follicular_phase">Follicular Phase: %1$s</string>
-    <string name="undefined">Undefined</string>
-
-    <string name="recent_notes_title">Recent Notes</string>
-    <string name="no_recent_notes">No recent notes</string>
-
-    <string name="btn_edit_note">Edit Note</string>
-
-    <string name="todays_activities_title">Today\'s Activities</string>
-    <string name="btn_add_note">Add a note</string>
-    <string name="btn_add_symptoms">Add symptoms</string>
-
-    <string name="water_intake">%1$d glasses</string>
-    <string name="btn_add_water">+</string>
-
-    <string name="timeline">Timeline</string>
-
-    <!-- Symptoms -->
-    <string-array name="symptoms">
-        <item>Cramps</item>
-        <item>Headache</item>
-        <item>Bloating</item>
-        <item>Fatigue</item>
-        <item>Mood Swings</item>
-        <item>Breast Tenderness</item>
-        <item>Acne</item>
-        <item>Backache</item>
-    </string-array>
-
-    <string name="luteal_phase1">Luteal Phase: %1$s - %2$s</string>
-    <string name="follicular_phase1">Follicular Phase: %1$s - %2$s</string>
-
-    <string name="calendar_legend">Calendar Legend</string>
-    <string name="legend_period">Legend Period</string>
-    <string name="legend_follicular">Legend Follicular</string>
-    <string name="legend_ovulation">Legend Ovulation</string>
-    <string name="legend_luteal">Legend Luteal</string>
-    <string name="legend_middle_pain">Legend Middle Pain</string>
 </resources>

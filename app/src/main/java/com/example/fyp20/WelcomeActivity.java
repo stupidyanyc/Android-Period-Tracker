@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.FirebaseApp;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     @Override
@@ -13,12 +15,22 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        Button enterButton = findViewById(R.id.enterButton);
+        Button registerButton = findViewById(R.id.registerButton);
+        Button loginButton = findViewById(R.id.loginButton);
 
-        enterButton.setOnClickListener(new View.OnClickListener() {
+        registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(WelcomeActivity.this, SignUpActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

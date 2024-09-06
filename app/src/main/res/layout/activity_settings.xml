@@ -10,11 +10,87 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- General Settings Category -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="設置"
-            android:textSize="24sp"
+            android:text="@string/general_setting"
+            android:textSize="20sp"
+            android:textColor="#FF69B4"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Language Selection -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language_setting"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp" />
+
+        <Spinner
+            android:id="@+id/spinnerLanguage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/spinner_border"
+            android:minHeight="48dp" />
+
+        <!-- Account Management Category -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FF69B4"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/account_mgmnt"
+            android:textSize="20sp"
+            android:textColor="#FF69B4"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/buttonChangeUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/change_id"
+            android:backgroundTint="#FF69B4"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/buttonChangeEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/change_email"
+            android:backgroundTint="#FF69B4"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/buttonChangePassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/change_pswd"
+            android:backgroundTint="#FF69B4"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Reminder Settings Category -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FF69B4"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/notification_setting"
+            android:textSize="20sp"
             android:textColor="#FF69B4"
             android:layout_marginBottom="16dp" />
 
@@ -24,11 +100,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"
-            android:text="開啟提醒功能"
+            android:text="@string/notification_switch"
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/reminderTimeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -37,22 +112,51 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="提醒時間: "
+                android:text="@string/reminder_1"
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/textViewReminderTime"
+                android:id="@+id/textViewReminderTime1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="09:00"
+                android:text="@string/remindertime_1"
                 android:textSize="18sp"
                 android:layout_marginRight="16dp" />
 
             <Button
-                android:id="@+id/buttonSetReminderTime"
+                android:id="@+id/buttonSetReminderTime1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="設置時間"
+                android:text="@string/remindertime_1_setting"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/reminder_2"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewReminderTime2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remindertime_2"
+                android:textSize="18sp"
+                android:layout_marginRight="16dp" />
+
+            <Button
+                android:id="@+id/buttonSetReminderTime2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remindertime_2_setting"
                 android:backgroundTint="#FF69B4"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
@@ -63,11 +167,10 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:minHeight="48dp"
-            android:text="喝水提醒"
+            android:text="@string/water_reminder"
             android:textSize="18sp" />
 
         <LinearLayout
-            android:id="@+id/waterReminderTimeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -76,14 +179,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="喝水提醒時間: "
+                android:text="@string/water_reminder_time"
                 android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/textViewWaterReminderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="每2小時"
+                android:text="@string/water_reminder_time_text"
                 android:textSize="18sp"
                 android:layout_marginRight="16dp" />
 
@@ -91,46 +194,44 @@
                 android:id="@+id/buttonSetWaterReminderTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="設置間隔"
+                android:text="@string/set_water_alarm"
                 android:backgroundTint="#FF69B4"
                 android:textColor="#FFFFFF" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/buttonChangeUsername"
+        <!-- Logout and Delete Account Category -->
+        <View
             android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FF69B4"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="更改用戶名"
-            android:backgroundTint="#FF69B4"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="8dp" />
+            android:text="@string/account_control"
+            android:textSize="20sp"
+            android:textColor="#FF69B4"
+            android:layout_marginBottom="16dp" />
 
         <Button
-            android:id="@+id/buttonChangeEmail"
+            android:id="@+id/buttonLogout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="更改郵箱"
+            android:text="@string/account_logout"
             android:backgroundTint="#FF69B4"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="16dp" />
 
         <Button
-            android:id="@+id/buttonChangePassword"
+            android:id="@+id/buttonDeleteAccount"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="更改密碼"
+            android:text="@string/account_delete"
             android:backgroundTint="#FF69B4"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="8dp" />
-
-        <Button
-            android:id="@+id/buttonChangeAvatar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="更改頭像"
-            android:backgroundTint="#FF69B4"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="16dp" />
 
     </LinearLayout>
 </ScrollView>

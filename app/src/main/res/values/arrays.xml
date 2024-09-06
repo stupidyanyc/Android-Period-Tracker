@@ -25,4 +25,9 @@
         <item>34 days</item>
         <item>35 days</item>
     </string-array>
+
+    <string-array name="languages">
+        <item>繁體中文</item>
+        <item>English</item>
+    </string-array>
 </resources>

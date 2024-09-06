@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">月月安心</string>
+    <string name="weclome_stat">歡迎使用月月安心</string>
+    <string name="welcome_back">歡迎回來</string>
+    <string name="enter_text">進入</string>
+
+    <!--signup pg strings-->
+    <string name="email_hint">電子郵箱</string>
+    <string name="password_hint">密碼</string>
+    <string name="confirmpswd_hint">確認密碼</string>
+    <string name="birthdate">生日: </string>
+    <string name="last_period_date">最近一次經期開始日期: </string>
+    <string name="period_length">經期長度: </string>
+    <string name="cycle_length">週期長度: </string>
+    <string name="privacy_stat">我們承諾保護您的隱私和個人數據安全。</string>
+    <string name="register_btn">註冊</string>
+    <string name="login_text">已有帳號?登入</string>
+
+    <!--login pg strings-->
+    <string name="forget_pswd">忘記密碼?</string>
+    <string name="login_btn">登入</string>
+    <string name="register_text">還沒有帳號?註冊</string>
+
+    <!--profile pg strings-->
+    <string name="user_id">用戶ID: %s</string>
+    <string name="user_email">電子郵件: %s</string>
+    <string name="user_age">年齡: %d歲</string>
+    <string name="period_info">經期資訊</string>
+    <string name="setting_btn">設置</string>
+
+    <!--setting pg strings-->
+    <string name="collection_btn">我的收藏</string>
+    <string name="general_setting">通用設置</string>
+    <string name="language_setting">選擇語言</string>
+    <string name="account_mgmnt">帳戶管理</string>
+    <string name="change_id">更改用戶名</string>
+    <string name="change_email">更改郵箱</string>
+    <string name="change_pswd">更改密碼</string>
+    <string name="notification_setting">提醒設置</string>
+    <string name="notification_switch">開啟提醒設置</string>
+    <string name="reminder_1">提醒時間1: </string>
+    <string name="remindertime_1">09:00</string>
+    <string name="remindertime_1_setting">設置時間</string>
+    <string name="reminder_2">提醒時間2: </string>
+    <string name="remindertime_2">21:00</string>
+    <string name="remindertime_2_setting">設置時間</string>
+    <string name="water_reminder">喝水提醒</string>
+    <string name="water_reminder_time">喝水提醒時間: </string>
+    <string name="water_reminder_time_text">每2小時</string>
+    <string name="set_water_alarm">設置間隔</string>
+    <string name="account_control">帳戶操作</string>
+    <string name="account_logout">登出</string>
+    <string name="account_delete">刪除帳戶</string>
+
+    <!--login class strings-->
+    <string name="enter_email_EmptyError">請輸入電子郵件</string>
+    <string name="enter_pswd_EmptyError">請輸入密碼</string>
+    <string name="login_successful">登入成功</string>
+    <string name="login_failed">登入失敗</string>
+    
+    <!--signup class strings-->
+    <string name="enter_valid_email">請輸入有效的電子郵箱地址</string>
+    <string name="enter_valid_pswd">密碼需包含8個字符，並至少有一個大寫字母、一個小寫字母、一個數字和一個特殊符號</string>
+    <string name="enter_pswd_NotMatch">密碼不一致</string>
+    <string name="register_successful">註冊成功</string>
+    <string name="register_failed">註冊失敗: </string>
+    <string name="title_home">主頁</string>
+    <string name="title_profile">我的</string>
+    <string name="title_settings">設置</string>
+</resources>

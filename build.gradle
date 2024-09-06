@@ -1,6 +1,11 @@
 buildscript {
+    repositories {
+        google()
+        // 其他倉庫...
+    }
     dependencies {
-        classpath 'com.google.gms:google-services:4.4.2'
+        classpath 'com.android.tools.build:gradle:4.2.2' // 使用你的 Gradle 版本
+        classpath 'com.google.gms:google-services:4.3.8' // 確保這一行存在
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

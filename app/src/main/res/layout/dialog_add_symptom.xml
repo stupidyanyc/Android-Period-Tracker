@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select your symptoms"
+            android:textAppearance="?attr/textAppearanceHeadline6"
+            android:layout_marginBottom="16dp" />
+
+        <CheckBox
+            android:id="@+id/checkBoxCramps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cramps" />
+
+        <CheckBox
+            android:id="@+id/checkBoxHeadache"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Headache" />
+
+        <CheckBox
+            android:id="@+id/checkBoxBloating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bloating" />
+
+        <CheckBox
+            android:id="@+id/checkBoxFatigue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fatigue" />
+
+        <CheckBox
+            android:id="@+id/checkBoxMoodSwings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mood Swings" />
+
+        <!-- Add more symptoms as needed -->
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFF0F5">
@@ -20,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="歡迎回來"
+            android:text="@string/welcome_back"
             android:textSize="24sp"
             android:textColor="#FF69B4"
             android:layout_marginTop="16dp"
@@ -31,18 +32,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:hint="電子郵件"
+            android:hint="@string/email_hint"
             android:inputType="textEmailAddress"
             android:minHeight="48dp" />
 
-        <EditText
-            android:id="@+id/editTextPassword"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="密碼"
-            android:inputType="textPassword"
-            android:minHeight="48dp" />
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password_hint"
+                android:inputType="textPassword"
+                android:minHeight="48dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/textViewForgotPassword"
@@ -52,14 +60,14 @@
             android:layout_marginBottom="8dp"
             android:clickable="true"
             android:minHeight="48dp"
-            android:text="忘記密碼?"
+            android:text="@string/forget_pswd"
             android:textColor="#FF69B4" />
 
         <Button
             android:id="@+id/buttonLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="登錄"
+            android:text="@string/login_btn"
             android:backgroundTint="#FF69B4"
             android:textColor="#FFFFFF"
             android:layout_marginBottom="16dp" />
@@ -71,7 +79,7 @@
             android:layout_gravity="center"
             android:clickable="true"
             android:minHeight="48dp"
-            android:text="Don't Have An Account Yet? Register"
+            android:text="@string/register_text"
             android:textColor="#FF69B4" />
 
     </LinearLayout>

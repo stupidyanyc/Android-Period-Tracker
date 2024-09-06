@@ -2,4 +2,23 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="background_color">#EFCCF5</color>
+    <color name="primary_color">#FF69B4</color>
+    <color name="primary_text_color">#212121</color>
+    <color name="secondary_text_color">#757575</color>
+    <color name="calendar_background">#9AFFFFFF</color>
+    <color name="current_day_background">#FF69B4</color>
+    <color name="selected_day_background">#FFB6C1</color>
+    <color name="event_indicator">#FF69B4</color>
+    <color name="calendar_text">#6D4E3A</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="water_icon_color">#2196F3</color>
+    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_item_color">#FF69B4</color>
+
+    <color name="period_color">#ED6F6F</color>
+    <color name="follicular_color">#8BC34A</color>
+    <color name="ovulation_color">#3F51B5</color>
+    <color name="luteal_color">#00FF99</color>
+    <color name="middle_pain">#FF9800</color>
 </resources>

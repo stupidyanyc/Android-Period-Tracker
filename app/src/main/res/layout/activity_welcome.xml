@@ -17,17 +17,24 @@
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="歡迎使用經期助手"
+        android:text="@string/weclome_stat"
         android:textColor="#FF69B4"
         android:textSize="24sp"
         android:textStyle="bold"
         android:layout_marginBottom="32dp" />
 
     <Button
-        android:id="@+id/enterButton"
-        android:layout_width="wrap_content"
+        android:id="@+id/registerButton"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="ENTER"
+        android:text="@string/register_btn"
+        android:backgroundTint="#FF69B4" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login_btn"
         android:backgroundTint="#FF69B4" />
 
 </LinearLayout>
