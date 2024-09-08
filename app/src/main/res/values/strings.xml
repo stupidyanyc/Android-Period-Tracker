@@ -67,6 +67,7 @@
 
     <!-- Bottom Navigation -->
     <string name="title_home">Home</string>
+    <string name="title_forum">Forum</string>
     <string name="title_profile">Profile</string>
     <string name="title_settings">Settings</string>
 
@@ -87,6 +88,7 @@
     <string name="no_recent_notes">No recent notes</string>
 
     <string name="btn_edit_note">Edit Note</string>
+    <string name="btn_delete_note">Delete Note</string>
 
     <string name="todays_activities_title">Today\'s Activities</string>
     <string name="btn_add_note">Add a note</string>

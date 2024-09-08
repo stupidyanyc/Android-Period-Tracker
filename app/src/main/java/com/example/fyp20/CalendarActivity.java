@@ -29,6 +29,8 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -59,6 +61,11 @@ public class CalendarActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private View dialogView;
 
+    private Button btnEditNote;
+    private Button btnDeleteNote;
+    private TextView textViewNotes;
+    private ImageView imageViewRecentNote;
+
     private Date selectedDate;
     private Date lastPeriodStartDate;
     private Date currentPeriodStartDate;
@@ -69,7 +76,6 @@ public class CalendarActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormatForMonth = new SimpleDateFormat("MMM yyyy", Locale.getDefault());
     private SimpleDateFormat dateFormatForDay = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-    private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_PICK = 2;
     private Uri photoUri;
     private static final int CAMERA_PERMISSION_CODE = 100;
@@ -82,6 +88,8 @@ public class CalendarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calendar);
+
+        selectedDate = new Date();
 
         try {
             // Initialize Firebase Auth and Database references
@@ -140,32 +148,21 @@ public class CalendarActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
-            EditText noteEditText = dialogView.findViewById(R.id.editTextNote);
-            String noteText = noteEditText.getText().toString();
-
-            if (requestCode == CAMERA_REQUEST_CODE) {
-                if (data != null && data.getExtras() != null) {
-                    Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
-                    if (imageBitmap != null) {
-                        ImageView imageView = dialogView.findViewById(R.id.imageViewPhoto);
-                        imageView.setImageBitmap(imageBitmap);
-                        imageView.setVisibility(View.VISIBLE);
-
-                        // 上傳照片和文字
-                        uploadPhotoAndSaveNote(imageBitmap, noteText);
-                    }
+            if (requestCode == CAMERA_REQUEST_CODE && data != null) {
+                // Capture image from camera
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                if (imageBitmap != null) {
+                    // Set the new bitmap and update photoUri
+                    photoUri = getImageUriFromBitmap(imageBitmap); // Method to convert bitmap to Uri
+                    updateImageInDialog(imageBitmap);
                 }
-            } else if (requestCode == REQUEST_IMAGE_PICK) {
-                if (data != null && data.getData() != null) {
-                    Uri photoUri = data.getData();
+            } else if (requestCode == REQUEST_IMAGE_PICK && data != null) {
+                // Pick image from gallery
+                photoUri = data.getData();
+                if (photoUri != null) {
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
-                        ImageView imageView = dialogView.findViewById(R.id.imageViewPhoto);
-                        imageView.setImageBitmap(bitmap);
-                        imageView.setVisibility(View.VISIBLE);
-
-                        // 上傳照片和文字
-                        uploadPhotoAndSaveNote(bitmap, noteText);
+                        updateImageInDialog(bitmap);
                     } catch (Exception e) {
                         e.printStackTrace();
                         Toast.makeText(this, "Failed to load image from gallery", Toast.LENGTH_SHORT).show();
@@ -173,6 +170,21 @@ public class CalendarActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void updateImageInDialog(Bitmap imageBitmap) {
+        ImageView imageView = dialogView.findViewById(R.id.imageViewPhotoEdit); // Assuming imageView is in dialog
+        if (imageView != null) {
+            imageView.setImageBitmap(imageBitmap);
+            imageView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private Uri getImageUriFromBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "Title", null);
+        return Uri.parse(path);
     }
 
     private void uploadPhotoAndSaveNote(Bitmap bitmap, String noteText) {
@@ -213,16 +225,18 @@ public class CalendarActivity extends AppCompatActivity {
             return;
         }
 
+        // Format the selected date to use it as the key in Firebase
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String formattedDate = dateFormat.format(selectedDate);
 
+        // Reference the user's notes under the selected date
         DatabaseReference userNotesRef = mDatabase.child(userId).child("notes").child(formattedDate);
 
         checkExistingNote(userNotesRef, (existingNoteId, existingNoteData) -> {
             Map<String, Object> updatedNoteData = new HashMap<>();
 
+            // Retain existing text and imageUrl if not updating them
             if (existingNoteData != null) {
-                // 保留現有的文本和圖片URL
                 if (existingNoteData.containsKey("text")) {
                     updatedNoteData.put("text", existingNoteData.get("text"));
                 }
@@ -231,12 +245,10 @@ public class CalendarActivity extends AppCompatActivity {
                 }
             }
 
-            // 更新文本（如果提供了新文本）
+            // Update the note text or image URL (if new ones are provided)
             if (noteText != null && !noteText.trim().isEmpty()) {
                 updatedNoteData.put("text", noteText);
             }
-
-            // 更新圖片URL（如果提供了新圖片URL）
             if (imageUrl != null && !imageUrl.trim().isEmpty()) {
                 updatedNoteData.put("imageUrl", imageUrl);
             }
@@ -248,12 +260,12 @@ public class CalendarActivity extends AppCompatActivity {
             if (noteId != null) {
                 userNotesRef.child(noteId).updateChildren(updatedNoteData)
                         .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(CalendarActivity.this, "Note saved successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(CalendarActivity.this, "Note updated successfully", Toast.LENGTH_SHORT).show();
                             updateRecentNotes((String) updatedNoteData.get("text"), (String) updatedNoteData.get("imageUrl"));
                         })
                         .addOnFailureListener(e -> {
-                            Toast.makeText(CalendarActivity.this, "Failed to save note", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "Error saving note", e);
+                            Toast.makeText(CalendarActivity.this, "Failed to update note", Toast.LENGTH_SHORT).show();
+                            Log.e(TAG, "Error updating note", e);
                         });
             }
         });
@@ -285,17 +297,6 @@ public class CalendarActivity extends AppCompatActivity {
         void onResult(String noteId, Map<String, Object> noteData);
     }
 
-    private void openCamera() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            // Permission is already granted, start the camera
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
-        } else {
-            // Request the camera permission
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA }, CAMERA_PERMISSION_CODE);
-        }
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -308,24 +309,6 @@ public class CalendarActivity extends AppCompatActivity {
             } else {
                 // Permission denied
                 Toast.makeText(this, "Camera permission is required to use the camera", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
-    private void saveImageUrlToFirebase(String imageUrl) {
-        // Assuming you want to save the image URL along with the note
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            String userId = currentUser.getUid();
-            // Store the image URL under the user's notes
-            DatabaseReference userNotesRef = mDatabase.child(userId).child("notes").child(dateSelect);
-            String noteId = userNotesRef.push().getKey();
-            Map<String, Object> noteData = new HashMap<>();
-            noteData.put("imageUrl", imageUrl);
-            noteData.put("timestamp", System.currentTimeMillis());
-
-            if (noteId != null) {
-                userNotesRef.child(noteId).updateChildren(noteData);
             }
         }
     }
@@ -345,6 +328,14 @@ public class CalendarActivity extends AppCompatActivity {
         btnStartPeriod = findViewById(R.id.btnStartPeriod);
         btnEndPeriod = findViewById(R.id.btnEndPeriod);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        btnEditNote = findViewById(R.id.btnEditNote);
+        btnDeleteNote = findViewById(R.id.btnDeleteNote);
+        textViewNotes = findViewById(R.id.textViewNotes);
+        imageViewRecentNote = findViewById(R.id.imageViewRecentNote);
+
+        // Hide edit and delete button at initialization
+        btnEditNote.setVisibility(View.GONE);
+        btnDeleteNote.setVisibility(View.GONE);
 
         Log.d(TAG, "Views initialized successfully");
     }
@@ -379,9 +370,9 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        selectedDate = new Date();
         calendarView.setCurrentDate(selectedDate);
         textViewDate.setText(dateFormatForMonth.format(selectedDate));
+        dateSelect = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate);
         Log.d(TAG, "Calendar view set up successfully");
     }
 
@@ -507,10 +498,12 @@ public class CalendarActivity extends AppCompatActivity {
                             String noteContent = noteSnapshot.child("text").getValue(String.class);
                             String imageUrl = noteSnapshot.child("imageUrl").getValue(String.class);
                             updateRecentNotes(noteContent, imageUrl);
+                            showEditDeleteButtons(true);
                             break;  // 只顯示最近的一條筆記
                         }
                     } else {
                         updateRecentNotes(null, null);
+                        showEditDeleteButtons(false);
                     }
                 }
 
@@ -531,7 +524,6 @@ public class CalendarActivity extends AppCompatActivity {
         EditText noteEditText = dialogView.findViewById(R.id.editTextNote);
         Button addPhotoButton = dialogView.findViewById(R.id.btnAddPhoto);
         Button saveNoteButton = dialogView.findViewById(R.id.btnSaveNote);
-        ImageView imageViewPhoto = dialogView.findViewById(R.id.imageViewPhoto);
 
         addPhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -577,6 +569,17 @@ public class CalendarActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    private void openCamera() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is already granted, start the camera
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE);
+        } else {
+            // Request the camera permission
+            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.CAMERA }, CAMERA_PERMISSION_CODE);
+        }
     }
 
     private void openGallery() {
@@ -677,6 +680,193 @@ public class CalendarActivity extends AppCompatActivity {
             recentNotesTextView.setVisibility(View.VISIBLE);
             recentNotesTextView.setText("No notes for this date");
         }
+    }
+
+    private void showEditDeleteButtons(boolean show) {
+        int visibility = show ? View.VISIBLE : View.GONE;
+        btnEditNote.setVisibility(visibility);
+        btnDeleteNote.setVisibility(visibility);
+
+        btnEditNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseUser currentUser = mAuth.getCurrentUser();
+                if (currentUser != null) {
+                    String userId = currentUser.getUid();
+                    String selectedDateStr = dateFormatForDay.format(selectedDate); // The selected date
+                    DatabaseReference userNotesRef = mDatabase.child(userId).child("notes").child(selectedDateStr);
+
+                    // Retrieve the note for the selected date
+                    userNotesRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                for (DataSnapshot noteSnapshot : dataSnapshot.getChildren()) {
+                                    String noteId = noteSnapshot.getKey();
+                                    String noteContent = noteSnapshot.child("text").getValue(String.class);
+                                    String imageUrl = noteSnapshot.child("imageUrl").getValue(String.class);
+
+                                    // Call the edit note dialog with the retrieved data
+                                    showEditNoteDialog(userId, noteId, noteContent, imageUrl);
+                                    break;  // Only handle the first note found for simplicity
+                                }
+                            } else {
+                                Toast.makeText(CalendarActivity.this, "No note found to edit.", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Log.e(TAG, "Error retrieving note for editing: ", databaseError.toException());
+                        }
+                    });
+                } else {
+                    Toast.makeText(CalendarActivity.this, "User not logged in", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        btnDeleteNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteNote();
+            }
+        });
+    }
+
+    private void showEditNoteDialog(String userId, String noteId, String currentText, String currentImageUrl) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_note, null);
+        builder.setView(dialogView);
+        AlertDialog dialog = builder.create();
+
+        EditText editTextNote = dialogView.findViewById(R.id.editTextNoteEdit);
+        ImageView imageViewPhoto = dialogView.findViewById(R.id.imageViewPhotoEdit);
+        Button btnRemovePhoto = dialogView.findViewById(R.id.btnRemovePhoto);
+        Button btnReplacePhoto = dialogView.findViewById(R.id.btnReplacePhoto);
+        Button btnSaveNote = dialogView.findViewById(R.id.btnSaveEditNote);
+        Button btnCancelNote = dialogView.findViewById(R.id.btnCancelEditNote);
+
+        // Set current note text
+        editTextNote.setText(currentText);
+
+        // Use a single-element array to hold the currentImageUrl, allowing it to be modified
+        final String[] imageUrlHolder = {currentImageUrl};
+
+        // Load and show current photo if available
+        if (imageUrlHolder[0] != null && !imageUrlHolder[0].isEmpty()) {
+            imageViewPhoto.setVisibility(View.VISIBLE);
+            btnRemovePhoto.setVisibility(View.VISIBLE);
+            Glide.with(this).load(imageUrlHolder[0]).into(imageViewPhoto);
+        }
+
+        // Handle removing the current photo
+        btnRemovePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageViewPhoto.setVisibility(View.GONE);
+                btnRemovePhoto.setVisibility(View.GONE);
+                // Mark photo as removed by setting it to null in the array
+                imageUrlHolder[0] = null;
+            }
+        });
+
+        // Handle replacing the photo
+        btnReplacePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPhotoOptions(); // Option to pick new photo (from gallery or camera)
+            }
+        });
+
+        // Save the note with updated text or photo
+        btnSaveNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String newNoteText = editTextNote.getText().toString();
+
+                // If a new photo is selected or replaced, upload it; otherwise use the existing image URL
+                if (photoUri != null) {
+                    saveEditedNoteToFirebase(userId, noteId, newNoteText, imageUrlHolder[0], photoUri);
+                } else {
+                    saveEditedNoteToFirebase(userId, noteId, newNoteText, imageUrlHolder[0], null);
+                }
+
+                dialog.dismiss();
+            }
+        });
+
+
+        // Cancel the edit
+        btnCancelNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+
+    private void saveEditedNoteToFirebase(String userId, String noteId, String noteContent, String currentImageUrl, Uri newPhotoUri) {
+        DatabaseReference noteRef = mDatabase.child(userId).child("notes").child(noteId);
+
+        Map<String, Object> noteData = new HashMap<>();
+        noteData.put("text", noteContent);
+
+        if (newPhotoUri != null) {
+            // New photo selected, upload it
+            uploadImageAndSaveNote(noteRef, noteId, noteData, newPhotoUri);
+        } else {
+            // Check if the photo was removed
+            if (currentImageUrl == null) {
+                noteData.put("imageUrl", null);  // Remove the image URL if user removed the photo
+            }
+            saveNoteData(noteRef, noteId, noteData); // Save the note data without uploading an image
+        }
+    }
+
+    private void deleteNote() {
+        new AlertDialog.Builder(this)
+                .setTitle("Delete Note")
+                .setMessage("Are you sure you want to delete this note?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // 執行刪除操作
+                        performDeleteNote();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
+    private void performDeleteNote() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null || selectedDate == null) {
+            Toast.makeText(this, "Unable to delete note", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        String userId = currentUser.getUid();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String dateKey = dateFormat.format(selectedDate);
+
+        DatabaseReference noteRef = mDatabase.child(userId).child("notes").child(dateKey);
+
+        noteRef.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(CalendarActivity.this, "Note deleted successfully", Toast.LENGTH_SHORT).show();
+                    updateRecentNotes(null, null);
+                    showEditDeleteButtons(false);
+                } else {
+                    Toast.makeText(CalendarActivity.this, "Failed to delete note", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private void updatePredictions(Date startDate) {
