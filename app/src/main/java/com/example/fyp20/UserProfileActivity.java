@@ -69,6 +69,9 @@ public class UserProfileActivity extends AppCompatActivity {
                 case R.id.navigation_home:
                     navigateToCalendar();
                     return true;
+                case R.id.navigation_forum:
+                    navigateToForum();
+                    return true;
                 case R.id.navigation_profile:
                     // Already on profile
                     return true;
@@ -155,6 +158,11 @@ public class UserProfileActivity extends AppCompatActivity {
     private void navigateToCalendar() {
         Intent intent = new Intent(this, CalendarActivity.class);
         startActivity(intent);
+    }
+
+    private void navigateToForum() {
+//        Intent intent = new Intent(this, ForumActivity.class);
+//        startActivity(intent);
     }
 
 //    private void openMyCollection() {
