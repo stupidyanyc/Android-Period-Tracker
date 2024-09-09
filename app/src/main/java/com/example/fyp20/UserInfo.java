@@ -11,6 +11,7 @@ public class UserInfo {
     private int lastPeriodYear;
     private String periodLength;
     private String cycleLength;
+    private String profileImageUrl;
 
     public UserInfo() {
         // Default constructor required for calls to DataSnapshot.getValue(UserProfile.class)
@@ -68,5 +69,13 @@ public class UserInfo {
 
     public String getCycleLength() {
         return cycleLength;
+    }
+
+    public String getProfileImageUrl() {
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
     }
 }

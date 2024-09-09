@@ -152,22 +152,28 @@ public class CalendarActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK) {
+
             ImageView imageViewPhoto = dialogView.findViewById(R.id.imageViewPhoto);
             ImageButton deletePhotoButton = dialogView.findViewById(R.id.btnDeletePhoto);
+
             if (requestCode == CAMERA_REQUEST_CODE && data != null) {
-                Bundle extras = data.getExtras();
                 // Capture image from camera
                 Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+
+                // Show the preview of photo captured
                 imageViewPhoto.setImageBitmap(imageBitmap);
                 selectedPhotoUri = getImageUri(this, imageBitmap);
+
                 if (imageBitmap != null) {
                     // Set the new bitmap and update photoUri
                     photoUri = getImageUriFromBitmap(imageBitmap); // Method to convert bitmap to Uri
                     updateImageInDialog(imageBitmap);
                 }
             } else if (requestCode == REQUEST_IMAGE_PICK && data != null) {
+                // Show the preview of photo selected
                 selectedPhotoUri = data.getData();
                 imageViewPhoto.setImageURI(selectedPhotoUri);
+
                 // Pick image from gallery
                 photoUri = data.getData();
                 if (photoUri != null) {

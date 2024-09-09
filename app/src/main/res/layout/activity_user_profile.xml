@@ -169,6 +169,58 @@
                 android:textColor="#FFFFFF"
                 android:layout_marginTop="8dp" />
 
+            <!-- Account Management Section -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#FF69B4"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_mgmnt"
+                android:textSize="20sp"
+                android:textColor="#FF69B4"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonChangeProfilePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/change_profile_photo"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonChangeUsername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/change_id"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonChangeEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/change_email"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonChangePassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/change_pswd"
+                android:backgroundTint="#FF69B4"
+                android:textColor="#FFFFFF"
+                android:layout_marginBottom="16dp" />
+
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

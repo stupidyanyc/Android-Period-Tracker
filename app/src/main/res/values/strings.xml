@@ -33,6 +33,7 @@
     <string name="general_setting">General Setting</string>
     <string name="language_setting">Language</string>
     <string name="account_mgmnt">Account Management</string>
+    <string name="change_profile_photo">Change Profile Photo</string>
     <string name="change_id">Change ID</string>
     <string name="change_email">Change Email</string>
     <string name="change_pswd">Change Password</string>

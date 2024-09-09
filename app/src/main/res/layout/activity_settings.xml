@@ -35,48 +35,6 @@
             android:background="@drawable/spinner_border"
             android:minHeight="48dp" />
 
-        <!-- Account Management Category -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#FF69B4"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/account_mgmnt"
-            android:textSize="20sp"
-            android:textColor="#FF69B4"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/buttonChangeUsername"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_id"
-            android:backgroundTint="#FF69B4"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/buttonChangeEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_email"
-            android:backgroundTint="#FF69B4"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/buttonChangePassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/change_pswd"
-            android:backgroundTint="#FF69B4"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="16dp" />
 
         <!-- Reminder Settings Category -->
         <View
