@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/contentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/primary_text_color"
+            android:layout_marginBottom="8dp"/>
+
+        <ImageView
+            android:id="@+id/postImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"/>
+
+        <VideoView
+            android:id="@+id/postVideoView"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:scaleType="fitCenter"
+            android:visibility="gone"
+            android:layout_marginBottom="8dp"/>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/likeButton"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Like"
+                    app:icon="@drawable/ic_like"
+                    android:textColor="@color/primary_color"
+                    app:iconTint="@color/primary_color"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/commentButton"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Comment"
+                    app:icon="@drawable/ic_comment"
+                    android:textColor="@color/primary_color"
+                    app:iconTint="@color/primary_color"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/shareButton"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Share"
+                    app:icon="@drawable/ic_share"
+                    android:textColor="@color/primary_color"
+                    app:iconTint="@color/primary_color"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/bookmarkButton"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bookmark"
+                    app:icon="@drawable/ic_bookmark"
+                    android:textColor="@color/primary_color"
+                    app:iconTint="@color/primary_color"/>
+
+            </LinearLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

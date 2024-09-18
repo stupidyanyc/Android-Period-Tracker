@@ -354,8 +354,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void navigateToForum() {
-        // Uncomment and implement when ForumActivity is ready
-        // Intent intent = new Intent(this, ForumActivity.class);
-        // startActivity(intent);
+         Intent intent = new Intent(this, ForumActivity.class);
+         startActivity(intent);
     }
 }

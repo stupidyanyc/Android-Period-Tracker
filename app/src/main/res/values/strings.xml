@@ -95,13 +95,13 @@
     <string name="btn_add_note">Add a note</string>
     <string name="btn_add_symptoms">Add symptoms</string>
 
-    <string name="water_intake">%1$d glasses</string>
+    <string name="water_intake">Water Intake: %s ml</string>
     <string name="btn_add_water">+</string>
 
     <string name="timeline">Timeline</string>
 
     <!-- Symptoms -->
-    <string-array name="symptoms">
+    <string-array name="symptom_array">
         <item>Cramps</item>
         <item>Headache</item>
         <item>Bloating</item>
@@ -121,4 +121,6 @@
     <string name="legend_ovulation">Legend Ovulation</string>
     <string name="legend_luteal">Legend Luteal</string>
     <string name="legend_middle_pain">Legend Middle Pain</string>
+
+    <string name="like_count">Like (%d)</string>
 </resources>

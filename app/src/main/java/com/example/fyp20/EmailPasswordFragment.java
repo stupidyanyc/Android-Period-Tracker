@@ -40,23 +40,23 @@ public class EmailPasswordFragment extends SignUpFragment {
         String confirmPassword = editTextConfirmPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            showError(editTextEmail, "請輸入電子郵件");
+            showError(editTextEmail, "Please Enter Email");
             return false;
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            showError(editTextEmail, "請輸入有效的電子郵件地址");
+            showError(editTextEmail, "Please Enter Valid Email");
             return false;
         }
         if (TextUtils.isEmpty(password)) {
-            showError(passwordLayout, "請輸入密碼");
+            showError(passwordLayout, "Please Enter Password");
             return false;
         }
         if (!isValidPassword(password)) {
-            showError(passwordLayout, "密碼至少需包含8個字符，並包含至少一個大寫字母、一個小寫字母、一個數字和一個特殊符號");
+            showError(passwordLayout, "The password must contain 8 characters and have at least one uppercase letter, one lowercase letter, one number and one special symbol");
             return false;
         }
         if (!password.equals(confirmPassword)) {
-            showError(confirmPasswordLayout, "密碼不一致");
+            showError(confirmPasswordLayout, "Password Not Match");
             return false;
         }
 

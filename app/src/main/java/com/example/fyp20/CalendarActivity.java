@@ -12,10 +12,13 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +30,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
@@ -43,9 +48,11 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -85,6 +92,15 @@ public class CalendarActivity extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 100;
     private static final int CAMERA_REQUEST_CODE = 101;
 
+    private Button btnAddSymptom;
+    private Button btnAddWater;
+    private TextView textViewWaterIntake;
+    private RecyclerView recyclerViewSymptoms;
+    private SymptomAdapter symptomAdapter;
+    private List<Symptom> symptomList = new ArrayList<>();
+
+    private int waterIntake = 0;
+
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
@@ -103,10 +119,15 @@ public class CalendarActivity extends AppCompatActivity {
             initializeViews();
             setupCalendarView();
             setupButtons();
+
             setupBottomNavigation();
+
+            setupSymptomRecyclerView();
 
             // Load user-specific data like cycle, period, etc.
             loadUserData();
+            loadSymptoms();
+            loadWaterIntake();
 
             // Fetch the current user from Firebase Authentication
             FirebaseUser currentUser = mAuth.getCurrentUser();
@@ -124,6 +145,9 @@ public class CalendarActivity extends AppCompatActivity {
                         showAddNoteDialog(userId);  // Pass userId to the dialog
                     }
                 });
+                btnAddSymptom.setOnClickListener(v -> showAddSymptomDialog());
+                btnAddWater.setOnClickListener(v -> addWater());
+
             } else {
                 Log.e(TAG, "User is not logged in.");
                 Toast.makeText(this, "User not logged in. Please log in first.", Toast.LENGTH_SHORT).show();
@@ -145,6 +169,11 @@ public class CalendarActivity extends AppCompatActivity {
             updatePredictions(lastPeriodStartDate);
         }
         Log.d(TAG, "onResume called, calendar updated");
+        if (selectedDate != null) {
+            loadSymptoms();
+            loadWaterIntake();
+            loadRecentNotes(mAuth.getCurrentUser().getUid(), dateSelect);
+        }
     }
 
     @Override
@@ -277,6 +306,10 @@ public class CalendarActivity extends AppCompatActivity {
         btnDeleteNote = findViewById(R.id.btnDeleteNote);
         textViewNotes = findViewById(R.id.textViewNotes);
         imageViewRecentNote = findViewById(R.id.imageViewRecentNote);
+        btnAddSymptom = findViewById(R.id.btnAddSymptom);
+        btnAddWater = findViewById(R.id.btnAddWater);
+        textViewWaterIntake = findViewById(R.id.textViewWaterIntake);
+        recyclerViewSymptoms = findViewById(R.id.recyclerViewSymptoms);
 
         // Hide edit and delete button at initialization
         btnEditNote.setVisibility(View.GONE);
@@ -306,6 +339,9 @@ public class CalendarActivity extends AppCompatActivity {
                 }
 
                 Log.d(TAG, "Selected date: " + dateFormatForDay.format(dateClicked));
+
+                loadSymptoms();
+                loadWaterIntake();
 
             }
 
@@ -369,8 +405,8 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void navigateToForum(){
-//        Intent intent = new Intent(this, ForumActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(this, ForumActivity.class);
+        startActivity(intent);
     }
 
     private void navigateToSettings() {
@@ -982,6 +1018,144 @@ public class CalendarActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "Failed to save period length: current user is null");
         }
+    }
+
+    private void showAddSymptomDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = getLayoutInflater().inflate(R.layout.dialog_add_symptom, null);
+        builder.setView(view);
+
+        Spinner spinnerSymptom = view.findViewById(R.id.spinnerSymptom);
+        SeekBar seekBarSeverity = view.findViewById(R.id.seekBarSeverity);
+        TextView textViewSeverity = view.findViewById(R.id.textViewSeverity);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.symptom_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSymptom.setAdapter(adapter);
+
+        seekBarSeverity.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textViewSeverity.setText("Severity: " + progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String symptomName = spinnerSymptom.getSelectedItem().toString();
+            int severity = seekBarSeverity.getProgress();
+            addSymptom(new Symptom(symptomName, severity));
+        });
+
+        builder.setNegativeButton("Cancel", null);
+
+        builder.show();
+    }
+
+    private void addSymptom(Symptom symptom) {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null || selectedDate == null) return;
+
+        String userId = currentUser.getUid();
+        String dateKey = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate);
+
+        DatabaseReference symptomsRef = mDatabase.child(userId).child("symptoms").child(dateKey);
+        String key = symptomsRef.push().getKey();
+        if (key != null) {
+            symptomsRef.child(key).setValue(symptom)
+                    .addOnSuccessListener(aVoid -> {
+                        loadSymptoms(); // 重新加載症狀列表
+                        Toast.makeText(CalendarActivity.this, "Symptom added", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> Toast.makeText(CalendarActivity.this, "Failed to add symptom", Toast.LENGTH_SHORT).show());
+        }
+    }
+
+    private void setupSymptomRecyclerView() {
+        symptomAdapter = new SymptomAdapter(symptomList);
+        recyclerViewSymptoms.setLayoutManager(new LinearLayoutManager(this));
+        recyclerViewSymptoms.setAdapter(symptomAdapter);
+    }
+
+    private void loadSymptoms() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null || selectedDate == null) return;
+
+        String userId = currentUser.getUid();
+        String dateKey = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate);
+
+        DatabaseReference symptomsRef = mDatabase.child(userId).child("symptoms").child(dateKey);
+        symptomsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                symptomList.clear();
+                for (DataSnapshot symptomSnapshot : dataSnapshot.getChildren()) {
+                    Symptom symptom = symptomSnapshot.getValue(Symptom.class);
+                    if (symptom != null) {
+                        symptomList.add(symptom);
+                    }
+                }
+                symptomAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(CalendarActivity.this, "Failed to load symptoms", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void addWater() {
+        waterIntake += 250; // 假設每次添加250ml
+        updateWaterIntakeDisplay();
+        saveWaterIntake();
+    }
+
+    private void updateWaterIntakeDisplay() {
+        String waterIntakeText = getString(R.string.water_intake, String.valueOf(waterIntake));
+        textViewWaterIntake.setText(waterIntakeText);
+    }
+
+    private void saveWaterIntake() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null || selectedDate == null) return;
+
+        String userId = currentUser.getUid();
+        String dateKey = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate);
+
+        mDatabase.child(userId).child("waterIntake").child(dateKey).setValue(waterIntake)
+                .addOnFailureListener(e -> Toast.makeText(CalendarActivity.this, "Failed to save water intake", Toast.LENGTH_SHORT).show());
+    }
+
+    private void loadWaterIntake() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser == null || selectedDate == null) return;
+
+        String userId = currentUser.getUid();
+        String dateKey = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(selectedDate);
+
+        mDatabase.child(userId).child("waterIntake").child(dateKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    waterIntake = dataSnapshot.getValue(Integer.class);
+                } else {
+                    waterIntake = 0;
+                }
+                updateWaterIntakeDisplay();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(CalendarActivity.this, "Failed to load water intake", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

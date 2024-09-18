@@ -407,6 +407,11 @@
                         app:strokeColor="@color/primary_color"
                         style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
 
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerViewSymptoms"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

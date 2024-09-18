@@ -47,21 +47,21 @@ public class LoginActivity extends AppCompatActivity {
         String password = editTextPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            showError(editTextEmail, "請輸入電子郵件");
+            showError(editTextEmail, "Please Enter Email");
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            showError(editTextPassword, "請輸入密碼");
+            showError(editTextPassword, "Please Enter Password");
             return;
         }
 
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Snackbar.make(view, "登入成功", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, "Login Succesfully", Snackbar.LENGTH_SHORT).show();
                 startActivity(new Intent(LoginActivity.this, UserProfileActivity.class));
                 finish();
             } else {
-                Snackbar.make(view, "登入失敗: " + task.getException().getMessage(), Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, "Login Failed: " + task.getException().getMessage(), Snackbar.LENGTH_SHORT).show();
             }
         });
     }
@@ -70,15 +70,15 @@ public class LoginActivity extends AppCompatActivity {
         String email = editTextEmail.getText().toString().trim();
 
         if (TextUtils.isEmpty(email)) {
-            showError(editTextEmail, "請輸入電子郵件以重置密碼");
+            showError(editTextEmail, "Enter Email to Reset Password");
             return;
         }
 
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Snackbar.make(view, "密碼重置郵件已發送，請檢查您的郵箱", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, "Reset Password Email Has Been Sent. Please Check Your Email", Snackbar.LENGTH_LONG).show();
             } else {
-                Snackbar.make(view, "發送密碼重置郵件失敗: " + task.getException().getMessage(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(view, "Failed to Sent Reset Password Email: " + task.getException().getMessage(), Snackbar.LENGTH_LONG).show();
             }
         });
     }

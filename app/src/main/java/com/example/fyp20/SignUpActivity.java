@@ -62,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
         viewPager.setUserInputEnabled(false);  // Disable swiping
 
         new TabLayoutMediator(tabLayout, viewPager,
-                (tab, position) -> tab.setText("步驟 " + (position + 1))
+                (tab, position) -> tab.setText("Step " + (position + 1))
         ).attach();
     }
 
@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void updateButtonVisibility(int position) {
         buttonPrevious.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
-        buttonNext.setText(position == fragments.size() - 1 ? "註冊" : "下一步");
+        buttonNext.setText(position == fragments.size() - 1 ? "Register" : "Next");
     }
 
     private void registerUser() {
@@ -127,12 +127,12 @@ public class SignUpActivity extends AppCompatActivity {
                             );
                             mDatabase.child(userId).setValue(userInfo);
 
-                            Snackbar.make(viewPager, "註冊成功", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(viewPager, "Register Succesfully", Snackbar.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                             finish();
                         }
                     } else {
-                        Snackbar.make(viewPager, "註冊失敗: " + task.getException().getMessage(),
+                        Snackbar.make(viewPager, "Register Failed: " + task.getException().getMessage(),
                                 Snackbar.LENGTH_SHORT).show();
                     }
                 });
